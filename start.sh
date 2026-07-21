@@ -1,12 +1,20 @@
-#!/bin/bash
-# Start Claude Code from source
-export PATH="$HOME/.bun/bin:$PATH"
-export IS_DEMO=1
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Skip version check by setting a high version (already in preload.ts)
+cd "$(dirname "$0")"
 
-echo "Starting Claude Code from source..."
-echo "Press Ctrl+C to exit"
-echo ""
+if [[ "${ACKNOWLEDGE_UNVERIFIED_SOURCE:-}" != "1" ]]; then
+  cat >&2 <<'EOF'
+Execution is disabled because this source tree has no established provenance or license.
+Restore it from an authoritative source and complete the review in PROVENANCE_REQUIRED.md.
+For an isolated, owner-approved audit only, set ACKNOWLEDGE_UNVERIFIED_SOURCE=1.
+EOF
+  exit 1
+fi
 
-bun run entrypoints/cli.tsx "$@"
+if ! command -v bun >/dev/null 2>&1; then
+  echo "Bun is required but is not installed; this launcher will not install it." >&2
+  exit 1
+fi
+
+exec bun run entrypoints/cli.tsx "$@"

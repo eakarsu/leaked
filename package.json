@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "bun run entrypoints/cli.tsx"
+    "start": "./start.sh"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
